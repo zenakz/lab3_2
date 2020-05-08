@@ -41,4 +41,17 @@ class OrderTest
         order.submit();
         assertDoesNotThrow(order::confirm);
     }
+
+    @Test
+    void Confirm24HoursAfterSubmitTest()
+    {
+        Order order = new Order(fakeClock);
+        order.addItem(new OrderItem());
+
+        fakeClock.setTime(time);
+        order.submit();
+
+        fakeClock.setTime(time.plusHours(24));
+        assertDoesNotThrow(order::confirm);
+    }
 }
