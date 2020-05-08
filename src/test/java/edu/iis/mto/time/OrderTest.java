@@ -9,7 +9,7 @@ class OrderTest
     @Test
     void ConfirmOrderJustAfterSubmitTest()
     {
-        Order order = new Order();
+        Order order = new Order(new SystemClock());
         order.addItem(new OrderItem());
         order.submit();
         assertDoesNotThrow(order::confirm);
