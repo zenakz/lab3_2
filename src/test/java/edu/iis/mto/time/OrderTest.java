@@ -54,4 +54,17 @@ class OrderTest
         fakeClock.setTime(time.plusHours(24));
         assertDoesNotThrow(order::confirm);
     }
+
+    @Test
+    void ConfirmExpiredOrderTest()
+    {
+        Order order = new Order(fakeClock);
+        order.addItem(new OrderItem());
+
+        fakeClock.setTime(time);
+        order.submit();
+
+        fakeClock.setTime(time.plusHours(25));
+        assertThrows(OrderExpiredException.class, order::confirm);
+    }
 }
