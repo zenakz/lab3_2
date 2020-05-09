@@ -18,7 +18,7 @@ public class Order {
         orderState = State.CREATED;
     }
 
-    public void setSystemClock(Clock clock){
+    public void setSystemClock(Clock clock) {
         this.systemClock = clock;
     }
 
@@ -35,13 +35,12 @@ public class Order {
 
         orderState = State.SUBMITTED;
         submissionDate = systemClock.getCurrentDateTime();
-
     }
 
     public void confirm() {
         requireState(State.SUBMITTED);
-        int hoursElapsedAfterSubmission = Hours.hoursBetween(submissionDate, systemClock.getCurrentDateTime() )
-                                               .getHours();
+        int hoursElapsedAfterSubmission = Hours.hoursBetween(submissionDate, systemClock.getCurrentDateTime())
+                .getHours();
         if (hoursElapsedAfterSubmission > VALID_PERIOD_HOURS) {
             orderState = State.CANCELLED;
             throw new OrderExpiredException();
@@ -65,9 +64,9 @@ public class Order {
         }
 
         throw new OrderStateException("order should be in state "
-                                      + allowedStates
-                                      + " to perform required  operation, but is in "
-                                      + orderState);
+                + allowedStates
+                + " to perform required  operation, but is in "
+                + orderState);
 
     }
 
