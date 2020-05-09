@@ -120,7 +120,7 @@ class OrderTestScenario {
         assertDoesNotThrow(() -> order.confirm());
 
         var result = order.getOrderState();
-        assertThat(result, not(Order.State.CANCELLED));
+        assertThat(result, equalTo(Order.State.CONFIRMED));
     }
 
     @AfterEach
