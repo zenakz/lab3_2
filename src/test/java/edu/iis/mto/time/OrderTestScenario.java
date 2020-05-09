@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 class OrderTestScenario {
 
     private Clock mockedClock;
@@ -43,7 +45,17 @@ class OrderTestScenario {
 
     @Test
     void orderConfirmationRequestedLessThan24HoursAfterOrderSubmissionShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus() {
+        Mockito.doReturn(testDateTime)
+                .doReturn(testDateTime.plusHours(23))
+                .when(mockedClock)
+                .getCurrentDateTime();
 
+        order.submit();
+
+        assertDoesNotThrow(() -> order.confirm());
+
+        var result = order.getOrderState();
+        assertThat(result, not(Order.State.CANCELLED));
     }
 
     @Test
