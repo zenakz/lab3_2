@@ -60,17 +60,37 @@ class OrderTestScenario {
 
     @Test
     void orderConfirmationRequestedBeforeOrderSubmissionShouldEndUpWithOrderStateException() {
-
+        assertThrows(OrderStateException.class, () -> order.confirm());
     }
 
     @Test
     void orderConfirmationRequestedOneMinuteBeforeOrderExpirationShouldNotEndUpWithOrderExpiredExceptionAndCancelledState() {
+        Mockito.doReturn(testDateTime)
+                .doReturn(testDateTime.plusMinutes(59).plusHours(23))
+                .when(mockedClock)
+                .getCurrentDateTime();
 
+        order.submit();
+
+        assertDoesNotThrow(() -> order.confirm());
+
+        var result = order.getOrderState();
+        assertThat(result, not(Order.State.CANCELLED));
     }
 
     @Test
     void orderConfirmationRequestedOneMinuteAfterOrderExpirationShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus() {
+        Mockito.doReturn(testDateTime)
+                .doReturn(testDateTime.plusMinutes(1).plusHours(24))
+                .when(mockedClock)
+                .getCurrentDateTime();
 
+        order.submit();
+
+        assertDoesNotThrow(() -> order.confirm());
+
+        var result = order.getOrderState();
+        assertThat(result, not(Order.State.CANCELLED));
     }
 
     @Test
