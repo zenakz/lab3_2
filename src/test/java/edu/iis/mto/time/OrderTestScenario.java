@@ -18,16 +18,39 @@ class OrderTestScenario {
     }
 
     @Test
-    void orderConfirmationRequestedMoreThan24hoursAfterOrderSubmissionShouldEndUpWithOrderExpiredExceptionAndCancelledStatus(){
+    void orderConfirmationRequestedMoreThan24hoursAfterOrderSubmissionShouldEndUpWithOrderExpiredExceptionAndCancelledStatus() {
 
     }
 
     @Test
-    void orderConfirmationRequestedLessThan24HoursAfterOrderSubmissionShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus(){
+    void orderConfirmationRequestedLessThan24HoursAfterOrderSubmissionShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus() {
 
     }
 
-    
+    @Test
+    void orderConfirmationRequestedBeforeOrderSubmissionShouldEndUpWithOrderStateException() {
+
+    }
+
+    @Test
+    void orderConfirmationRequestedOneMinuteBeforeOrderExpirationShouldNotEndUpWithOrderExpiredExceptionAndCancelledState() {
+
+    }
+
+    @Test
+    void orderConfirmationRequestedOneMinuteAfterOrderExpirationShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus() {
+
+    }
+
+    @Test
+    void orderConfirmationRequested59MinutesAfterOrderExpirationShouldNotEndUpWithOrderExpiredExceptionAndCancelledStatus() {
+
+    }
+
+    @Test
+    void orderConfirmationRequestedNearlyInTheSameTimeAsOrderSubmissionShouldEndUpWithConfirmedStatus() {
+
+    }
 
     @AfterEach
     void tearDown() {
