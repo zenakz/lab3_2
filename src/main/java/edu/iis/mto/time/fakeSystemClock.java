@@ -15,6 +15,6 @@ public class fakeSystemClock implements Clock {
     }
 
     @Override public void setDate(DateTime dateTime) {
-        dateTime = new DateTime();
+        this.dateTime = dateTime;
     }
 }
