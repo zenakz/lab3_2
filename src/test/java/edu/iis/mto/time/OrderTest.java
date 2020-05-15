@@ -24,9 +24,14 @@ class OrderTest {
         order.addItem(new OrderItem());
         order.submit();
         clock.setDate(clock.currentTime().plusHours(25));
-        System.out.println(clock.currentTime());
         assertThrows(OrderExpiredException.class, () -> order.confirm());
         assertEquals(Order.State.CANCELLED, order.getOrderState());
     }
 
+    @Test void isOrderStateConfirmedWhenConfirmedInTime() {
+        order.addItem(new OrderItem());
+        order.submit();
+        order.confirm();
+        assertEquals(Order.State.CONFIRMED, order.getOrderState());
+    }
 }
