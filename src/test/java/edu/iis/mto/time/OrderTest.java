@@ -1,7 +1,5 @@
 package edu.iis.mto.time;
 
-import org.junit.BeforeClass;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +10,8 @@ class OrderTest {
     private Order order;
     private static Clock clock;
 
-    @BeforeAll static void start() {
-        clock = new fakeSystemClock();
-    }
-
     @BeforeEach void prep() {
+        clock = new fakeSystemClock();
         order = new Order(clock);
     }
 
@@ -33,5 +28,32 @@ class OrderTest {
         order.submit();
         order.confirm();
         assertEquals(Order.State.CONFIRMED, order.getOrderState());
+    }
+
+    @Test void doesConfirmUnsubmitedOrderThrowException() {
+        order.addItem(new OrderItem());
+        assertThrows(OrderStateException.class, () -> order.confirm());
+    }
+
+    @Test void doesRealizeUnconfirmedOrderThrowException() {
+        order.addItem(new OrderItem());
+        order.submit();
+        assertThrows(OrderStateException.class, () -> order.realize());
+    }
+
+    @Test void isOrderStateRealizedAfterRealize() {
+        order.addItem(new OrderItem());
+        order.submit();
+        clock.setDate(clock.currentTime().plusHours(2));
+        order.confirm();
+        order.realize();
+        assertEquals(Order.State.REALIZED, order.getOrderState());
+    }
+
+    @Test void isOrderExpiredWhenConfirmedAfterAYear() {
+        order.addItem(new OrderItem());
+        order.submit();
+        clock.setDate(clock.currentTime().plusYears(1));
+        assertThrows(OrderExpiredException.class, () -> order.confirm());
     }
 }
